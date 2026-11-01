@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Global pricing metrics — narrated lecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F4F9;--surface:#FFFFFF;--ink:#1C1730;--muted:#615A75;--line:#E3E0EC;--accent:#5B21B6;--accent-ink:#fff;--accent-soft:#EEE7FB;--pink:#B8166F;--pink-soft:#FBE6F1;--ok:#17784F;--ok-soft:#E3F4EC;--code-bg:#F0EEF6;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14111D;--surface:#1E1A2B;--ink:#ECE9F5;--muted:#A39CB8;--line:#332D45;--accent:#A47BF0;--accent-ink:#14111D;--accent-soft:#2B2342;--pink:#F06BB4;--pink-soft:#3A1D30;--ok:#4CC38A;--ok-soft:#17332A;--code-bg:#191524;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14111D;--surface:#1E1A2B;--ink:#ECE9F5;--muted:#A39CB8;--line:#332D45;--accent:#A47BF0;--accent-ink:#14111D;--accent-soft:#2B2342;--pink:#F06BB4;--pink-soft:#3A1D30;--ok:#4CC38A;--ok-soft:#17332A;--code-bg:#191524;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Onest",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+button,select,input{font:inherit;color:inherit}
+button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 18px 70px}
+h1{font-size:clamp(24px,3.6vw,34px);margin:0 0 4px;letter-spacing:-.02em}
+.sub{color:var(--muted);margin:0 0 16px}
+/* stage */
+#stage{position:relative;width:100%;aspect-ratio:16/9;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;container-type:inline-size;color:var(--ink)}
+#stage:fullscreen{border-radius:0;border:0;width:100vw;height:100vh;aspect-ratio:auto;display:flex;align-items:center;justify-content:center;background:var(--surface)}
+#stage:fullscreen .inner{width:min(100vw,177.78vh);aspect-ratio:16/9}
+.inner{position:relative;width:100%;height:100%;container-type:inline-size}
+.topbar{position:absolute;left:4cqw;right:4cqw;top:2.6cqw;display:flex;justify-content:space-between;font-size:1.35cqw;color:var(--muted);font-weight:600;letter-spacing:.02em}
+.prog{position:absolute;left:0;right:0;top:0;height:.45cqw;background:var(--line)}
+#bar{height:100%;background:var(--accent);width:0;transition:width .4s}
+#sbody{position:absolute;left:4cqw;right:4cqw;top:5.6cqw;bottom:8cqw;display:flex;flex-direction:column}
+#sbody h2{font-size:3.6cqw;line-height:1.1;margin:0 0 2cqw;letter-spacing:-.02em}
+.content{flex:1;font-size:1.9cqw;min-height:0}
+.content.scroll{overflow:auto;padding-right:1cqw}
+#caption{position:absolute;left:6cqw;right:6cqw;bottom:2cqw;text-align:center;font-size:1.6cqw;line-height:1.35;background:rgba(20,17,29,.82);color:#fff;padding:.8cqw 1.4cqw;border-radius:1cqw}
+.big-formula{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:2.3cqw;background:var(--accent-soft);color:var(--accent);padding:1.4cqw 2cqw;border-radius:1.2cqw;margin:0 0 2cqw;display:inline-block}
+.pts{margin:0;padding-left:2.4cqw}.pts li{margin-bottom:1cqw}
+.pts.two{columns:2;column-gap:4cqw}
+.pts.check{list-style:none;padding-left:0}.pts.check li::before{content:"✓ ";color:var(--ok);font-weight:700}
+.note{font-size:1.9cqw;margin:1.6cqw 0 0;color:var(--muted)}.note b{color:var(--ink)}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:1.4cqw;margin-top:2cqw}
+.pill{background:var(--bg);border:1px solid var(--line);border-radius:1.4cqw;padding:1.8cqw 1.4cqw;font-weight:700;font-size:1.8cqw;display:flex;flex-direction:column;gap:.6cqw}
+.pill b{font-size:3.2cqw;color:var(--accent)}.pill small{font-weight:500;color:var(--muted);font-size:1.4cqw}
+.wf{display:flex;gap:2cqw;align-items:flex-end;height:22cqw;margin-top:1cqw}
+.wfc{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch;position:relative}
+.wfc .bar{position:absolute;left:0;right:0;background:var(--accent);border-radius:.4cqw}.wfc .bar.neg{background:var(--pink)}.wfc .bar.ok{background:var(--ok)}
+.wfc span{position:absolute;bottom:-5.4cqw;left:0;right:0;text-align:center;font-size:1.35cqw;color:var(--muted);line-height:1.25}.wfc span b{color:var(--ink);font-size:1.6cqw}
+.wf + .note{margin-top:7cqw}
+.pvm{display:flex;flex-direction:column;gap:1.4cqw;margin-top:1cqw}
+.pbar{background:var(--accent);color:var(--accent-ink);padding:1.2cqw 1.6cqw;border-radius:.8cqw;font-size:1.8cqw;white-space:nowrap;min-width:fit-content}
+.pbar.mix{background:var(--ok)}.pbar.price{background:var(--pink)}
+.steps{display:flex;gap:6cqw;align-items:flex-end;height:20cqw;padding-left:4cqw}
+.stbar{width:12cqw;background:var(--accent);border-radius:.8cqw .8cqw 0 0;position:relative}.stbar.hi{background:var(--pink)}
+.stbar span{position:absolute;top:-6cqw;left:-2cqw;right:-2cqw;text-align:center;font-size:1.5cqw;color:var(--muted)}.stbar span b{color:var(--ink);font-size:2cqw}
+.steps{margin-top:7cqw}
+table.mini{border-collapse:collapse;font-size:1.8cqw;margin-top:.6cqw}
+table.mini th,table.mini td{padding:.9cqw 2cqw;border-bottom:1px solid var(--line);text-align:left}
+table.mini th{color:var(--muted);font-weight:600}
+.neg-t{color:var(--pink)}
+.lead{font-size:2.4cqw;margin:0 0 1.4cqw}.muted{color:var(--muted)}
+.qtext{font-size:2.4cqw;font-weight:600;margin:0 0 1.8cqw}
+.vopts{display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw}
+.vopt{border:2px solid var(--line);border-radius:1cqw;padding:1.2cqw 1.6cqw;font-size:1.8cqw;display:flex;gap:1.2cqw;align-items:baseline}
+.vopt b{color:var(--accent)}.vopt.right{border-color:var(--ok);background:var(--ok-soft);color:var(--ok);font-weight:600}.vopt.right b{color:var(--ok)}.vopt.dim{opacity:.45}
+.expl{font-size:1.9cqw;margin:1.8cqw 0 0;color:var(--muted)}
+.answer{font-size:6cqw;font-weight:800;color:var(--ok);margin:0;letter-spacing:-.02em}
+.cd{font-size:7cqw;font-weight:800;color:var(--accent);margin-top:1.6cqw;font-variant-numeric:tabular-nums}
+.iq{margin-bottom:2cqw}.iqq{font-weight:600;margin:0 0 .8cqw}
+.iopts{display:grid;grid-template-columns:1fr 1fr;gap:.8cqw}
+.iopt{text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:.8cqw;padding:.8cqw 1.2cqw;font-size:1.6cqw;cursor:pointer}
+.iopt b{color:var(--accent)}.iopt:disabled{cursor:default}
+.iopt.right{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}.iopt.wrong{border-color:var(--pink);background:var(--pink-soft);color:var(--pink)}
+.fb{font-size:1.5cqw;margin:.8cqw 0 0;padding:.8cqw 1.2cqw;border-radius:.8cqw}.fb.ok{background:var(--ok-soft);color:var(--ok)}.fb.bad{background:var(--pink-soft);color:var(--pink)}
+.crow{display:flex;gap:1cqw;align-items:center;flex-wrap:wrap}.crow.end{justify-content:flex-end;margin-top:1cqw}
+.crow input{font-size:1.7cqw;width:14cqw;padding:.6cqw 1cqw;border:1px solid var(--line);border-radius:.8cqw;background:var(--bg)}
+.sbtn{font-size:1.6cqw;padding:.7cqw 1.6cqw;border-radius:.8cqw;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:600}
+.sbtn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}.sbtn.ghost{background:transparent}
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0 10px}
+.btn{border:1px solid var(--line);background:var(--surface);padding:8px 14px;border-radius:10px;font-weight:600;cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);min-width:110px}
+.controls label{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.controls select{padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--surface);max-width:260px}
+.sp{flex:1}
+#chapters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+#chapters button{border:1px solid var(--line);background:var(--surface);padding:5px 11px;border-radius:999px;font-size:13px;cursor:pointer}
+#chapters button[aria-current="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.howto{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:6px 20px 14px}
+.howto summary{cursor:pointer;font-weight:700;font-size:18px;padding:12px 0}
+.howto h3{font-size:16px;margin:16px 0 6px}.howto ol,.howto ul{padding-left:22px;margin:4px 0}.howto li{margin-bottom:5px}
+.howto code{font-family:"JetBrains Mono",monospace;font-size:13px;background:var(--code-bg);padding:1px 5px;border-radius:4px}
+.howto pre{background:var(--code-bg);padding:10px 12px;border-radius:8px;overflow-x:auto;font-size:13px}
+.kbd{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Global pricing metrics — narrated lecture</h1>
+<p class="sub">About 15 minutes: 21 slides with a narrator and captions, and a checkpoint after each module. Interactive mode waits for your answers; Video mode reads questions aloud, pauses, and reveals answers — use it for recording.</p>
+<div id="stage"><div class="inner">
+  <div class="prog"><div id="bar"></div></div>
+  <div class="topbar"><span id="modlabel"></span><span id="count"></span></div>
+  <div id="sbody"></div>
+  <div id="caption" hidden aria-live="polite"></div>
+</div></div>
+<div class="controls">
+  <button class="btn" id="prev" aria-label="Previous">⏮</button>
+  <button class="btn primary" id="play">▶ Play</button>
+  <button class="btn" id="next" aria-label="Next">⏭</button>
+  <label>Mode <select id="mode"><option value="interactive">Interactive (I answer)</option><option value="video">Video (auto quiz)</option></select></label>
+  <label>Voice <select id="voice"></select></label>
+  <label>Speed <select id="rate"><option value="0.9">0.9×</option><option value="1" selected>1×</option><option value="1.1">1.1×</option><option value="1.25">1.25×</option></select></label>
+  <label><input type="checkbox" id="captions" checked> Captions</label>
+  <label><input type="checkbox" id="mute"> Mute (read captions)</label>
+  <span class="sp"></span>
+  <button class="btn" id="fs">⛶ Full screen</button>
+</div>
+<p class="kbd">Keys: Space — play/pause · ← → — previous/next · F — full screen. The narrator uses your browser’s built-in voices; Microsoft Edge has the most natural ones (“… Online (Natural)”).</p>
+<div id="chapters"></div>
+
+<details class="howto"><summary>Turn this into an MP4 video (free tools, no registration)</summary>
+<h3>Option 1 — OBS Studio (Windows, macOS, Linux)</h3>
+<ol>
+<li>Install <b>OBS Studio</b> from obsproject.com — free, no account.</li>
+<li>Open this file in <b>Microsoft Edge</b> (best voices) or Chrome. Set <b>Mode: Video</b>, pick a voice, check captions on or off.</li>
+<li>In OBS, add a source: <b>Window Capture</b> (choose the browser window) or <b>Display Capture</b>. On macOS 13+ use <b>macOS Screen Capture</b>, which also records the browser’s sound.</li>
+<li>Check that <b>Desktop Audio</b> moves in the OBS mixer when the narrator speaks.</li>
+<li>Settings → Output → Recording format <b>MP4</b>; Settings → Video → 1920×1080, 30 fps.</li>
+<li>Press <b>Full screen</b> here, then <b>Start Recording</b> in OBS, then Space to play. Stop recording after “End of the lecture”.</li>
+</ol>
+<h3>Option 2 — built into the system</h3>
+<ul>
+<li><b>Windows 10/11:</b> focus the browser and press <b>Win + Alt + R</b> (Xbox Game Bar). It records the window with system sound to Videos → Captures.</li>
+<li><b>macOS:</b> <b>Cmd + Shift + 5</b> records the screen but not system sound without an extra audio driver — use OBS instead.</li>
+</ul>
+<h3>Option 3 — trim or compress (optional)</h3>
+<ul>
+<li><b>LosslessCut</b> or <b>Shotcut</b> (free, no account) to trim the start and end.</li>
+<li>Or <b>ffmpeg</b>: <code>ffmpeg -i recording.mkv -c:v libx264 -crf 23 -c:a aac lecture.mp4</code></li>
+</ul>
+<h3>Editing the lecture</h3>
+<p>All narration and slides are plain text inside this HTML file (the <code>MODULES</code> list near the bottom). Paste a section into Claude and ask it to rewrite the narration, add a slide or a question, then paste it back.</p>
+</details>
+</div>
+<script>
+const MODULES = [
+{title:"Introduction", slides:[
+ {title:"What a global pricing analyst measures", html:`
+  <div class="grid5">
+   <div class="pill"><b>1</b>Price realization<small>Do we keep the price we set?</small></div>
+   <div class="pill"><b>2</b>Subscription economics<small>Renewals, churn, elasticity</small></div>
+   <div class="pill"><b>3</b>Competitiveness<small>Are we priced right?</small></div>
+   <div class="pill"><b>4</b>Governance<small>FX, floors, accuracy</small></div>
+   <div class="pill"><b>5</b>Portfolios<small>eSIM, Standalone, KSOS, Retail</small></div>
+  </div>`,
+  say:["Welcome to this short lecture on global pricing metrics for consumer and small-business security software.",
+       "We will go through five groups of metrics: price realization, subscription economics, competitiveness, governance, and portfolio-specific metrics.",
+       "Each module ends with a short checkpoint: a few quiz questions and one calculation, like the ones you might see in a test assignment.",
+       "Let's start."]},
+]},
+
+{title:"Module 1 · Price realization", slides:[
+ {title:"Net price realization", html:`
+  <p class="big-formula">Net realization = net revenue ÷ list-price revenue</p>
+  <ul class="pts"><li>Both sides <b>ex-VAT</b> — tax is not revenue</li><li>Reveals leakage: promos, partner margins, app-store fees, refunds</li><li>Usually the biggest hidden lever in pricing</li></ul>`,
+  say:["The first and often most important metric is net price realization.",
+       "It is net revenue divided by what you would have earned at list price, with both sides measured excluding VAT.",
+       "It answers a simple question: of the price we set, how much do we actually keep?",
+       "The gap comes from promotions, partner and retailer margins, app-store commissions and refunds."]},
+ {title:"Example: the price waterfall", html:`
+  <div class="wf">
+   <div class="wfc"><div class="bar" style="bottom:0;height:100%"></div><span>List ex-VAT<br><b>€49.99</b></span></div>
+   <div class="wfc"><div class="bar neg" style="bottom:70%;height:30%"></div><span>Promo −30%<br><b>−€15.00</b></span></div>
+   <div class="wfc"><div class="bar neg" style="bottom:59.5%;height:10.5%"></div><span>Store fee 15%<br><b>−€5.25</b></span></div>
+   <div class="wfc"><div class="bar neg" style="bottom:57.7%;height:1.8%;min-height:3px"></div><span>Refunds 3%<br><b>−€0.89</b></span></div>
+   <div class="wfc"><div class="bar ok" style="bottom:0;height:57.7%"></div><span>Net<br><b>€28.85</b></span></div>
+  </div>
+  <p class="note">Realization = 28.85 ÷ 49.99 ≈ <b>57.7%</b></p>`,
+  say:["Here is a worked example for a mobile purchase.",
+       "The list price is 59 euros 99 including twenty percent VAT, which is 49 euros 99 excluding VAT.",
+       "A thirty percent promotion removes 15 euros.",
+       "The app store takes fifteen percent of the ex-VAT price, another 5 euros 25.",
+       "Refunds of three percent remove almost 90 cents.",
+       "We keep 28 euros 85, so realization is about fifty-eight percent.",
+       "Building this waterfall by channel and market shows exactly where value leaks."]},
+ {title:"ARPU per license-year", html:`
+  <p class="big-formula">ARPU = revenue ÷ active subscriptions</p>
+  <ul class="pts"><li>Normalise per <b>device-year</b>: 1 vs 2-year terms, 3 vs 10 devices</li><li>Otherwise a market selling more 10-device plans looks “more expensive”</li><li>Compare markets and tiers on the same basis</li></ul>`,
+  say:["To compare markets fairly we use average revenue per user, normalised per license-year or per device-year.",
+       "Without normalisation, a market that sells more two-year terms or ten-device plans will look more expensive than it really is."]},
+ {title:"Price–volume–mix", html:`
+  <div class="pvm">
+   <div><div class="pbar" style="width:39%">Volume <b>€5,333</b></div></div>
+   <div><div class="pbar mix" style="width:48%">Mix <b>€6,667</b></div></div>
+   <div><div class="pbar price" style="width:13%">Price <b>€1,800</b></div></div>
+  </div>
+  <p class="note">Revenue +€13,800: Standard 1,000→900 units (€40→€42), Premium 500→700 units (€80)</p>`,
+  say:["Price, volume, mix analysis splits a revenue change into three parts.",
+       "Volume: we sold more units. Mix: customers moved between cheaper and more expensive products. Price: prices themselves changed.",
+       "In this example revenue grew by 13,800 euros.",
+       "Volume explains about 5,300, mix 6,700, and the price increase on Standard only 1,800.",
+       "So growth came mostly from customers moving to Premium, not from the price increase.",
+       "Remember, this is accounting, not causality: volume may have grown because of a price change."]},
+], quiz:{mcq:[
+  {q:"Net price realization measures…", o:["Revenue growth year over year","The share of list price actually kept after discounts, fees and refunds","The price compared with competitors","The share of customers who renew"], a:1, e:"Net revenue ÷ list-price revenue: how much of the price you set you actually keep."},
+  {q:"Average selling price rose 5% while no list price changed. Most likely…", o:["A price effect","A mix effect","An FX error","Lower churn"], a:1, e:"Customers bought more expensive tiers or plans — the mix component of PVM."},
+ ], calc:{q:"Price €59.99 incl. 20% VAT, promo 30%, store fee 15% of ex-VAT price, refunds 3%. Net realization vs ex-VAT list, in %?", ans:57.7, tol:0.6, unit:"%", sol:"34.99 ex-VAT after promo → 29.74 after fee → 28.85 after refunds; 28.85 ÷ 49.99 ≈ 57.7%."}}},
+
+{title:"Module 2 · Subscription economics", slides:[
+ {title:"The renewal is the moment of truth", html:`
+  <div class="steps">
+   <div class="stbar" style="height:43%"><span>Year 1<br><b>€29.99</b></span></div>
+   <div class="stbar hi" style="height:100%"><span>Renewal<br><b>€69.99</b></span></div>
+  </div>
+  <p class="note">Step-up = 69.99 ÷ 29.99 − 1 ≈ <b>+133%</b></p>`,
+  say:["Consumer security is a subscription business, and the most price-sensitive moment is the first renewal at full price.",
+       "The intro-to-renewal step-up is the renewal price divided by the first-year price, minus one.",
+       "Here, 29 euros 99 in year one becomes 69 euros 99 at renewal: a step-up of about one hundred and thirty-three percent.",
+       "Large step-ups drive churn, refunds and complaints, so this ratio should be governed, not accidental."]},
+ {title:"Price changes and renewals", html:`
+  <table class="mini"><tr><th></th><th>Before</th><th>After +10%</th></tr>
+   <tr><td>Due for renewal</td><td>100,000</td><td>100,000</td></tr>
+   <tr><td>Renewal rate</td><td>60%</td><td>56%</td></tr>
+   <tr><td>Price</td><td>€50</td><td>€55</td></tr>
+   <tr><td>Renewal revenue</td><td>€3.00M</td><td><b>€3.08M (+2.7%)</b></td></tr>
+   <tr><td>Customers kept</td><td>60,000</td><td><b class="neg-t">56,000</b></td></tr></table>`,
+  say:["Suppose 100,000 subscriptions are due for renewal at 50 euros, with a sixty percent renewal rate.",
+       "We raise the renewal price by ten percent and the renewal rate drops to fifty-six percent.",
+       "Renewal revenue grows by about 2.7 percent.",
+       "But we lost 4,000 customers who will not renew next year either.",
+       "So always check lifetime value, and measure the effect with cohorts or a control market over the full renewal cycle."]},
+ {title:"Price elasticity", html:`
+  <p class="big-formula">E = %ΔQuantity ÷ %ΔPrice</p>
+  <ul class="pts"><li>Price €49.99 → €54.99, sales 10,000 → 9,300</li><li>Arc elasticity ≈ <b>−0.76</b> → inelastic</li><li>Revenue €499,900 → €511,407 (<b>+2.3%</b>)</li><li>|E| &gt; 1: a cut raises revenue · |E| &lt; 1: a rise does</li></ul>`,
+  say:["Elasticity is the percentage change in quantity divided by the percentage change in price.",
+       "For larger changes we use the arc version, dividing each change by the average of the two values.",
+       "Here price rose from 49 euros 99 to 54 euros 99 and monthly sales fell from 10,000 to 9,300.",
+       "Arc elasticity is about minus 0.76, so demand is inelastic and revenue grew by 2.3 percent.",
+       "Be careful: prices are not set randomly, so elasticity from historical data is biased. Tests or control markets are better."]},
+ {title:"LTV and break-even discounts", html:`
+  <p class="big-formula">LTV ≈ ARPU × margin ÷ (1 − renewal rate)</p>
+  <p class="note">€45 × 85% ÷ 0.4 ≈ <b>€95.6</b></p>
+  <p class="big-formula">Volume needed = d ÷ (m − d)</p>
+  <p class="note">Margin 70%, discount 20% → volume must grow <b>40%</b></p>`,
+  say:["Lifetime value lets you justify a lower intro price if it brings customers who renew.",
+       "A simple version is annual revenue per user, times gross margin, divided by one minus the renewal rate. With 45 euros, eighty-five percent margin and sixty percent renewal, that's about 96 euros.",
+       "And before any discount, ask how much volume must grow to keep profit unchanged.",
+       "The formula is discount divided by margin minus discount. With a seventy percent margin, a twenty percent discount needs forty percent more volume."]},
+], quiz:{mcq:[
+  {q:"Elasticity is −0.5. A 10% price increase changes revenue by about…", o:["−5%","+4.5%","0%","−10%"], a:1, e:"1.10 × 0.95 ≈ 1.045 — inelastic demand, so revenue rises."},
+  {q:"A very high intro-to-renewal step-up mainly risks…", o:["Lower acquisition","Higher churn, refunds and complaints at renewal","Higher FX drift","Lower app-store fees"], a:1, e:"The first full-price renewal is the most sensitive moment."},
+  {q:"Gross margin 70%, discount 20%. Break-even volume growth is…", o:["20%","29%","40%","70%"], a:2, e:"d ÷ (m − d) = 0.2 ÷ 0.5 = 40%."},
+ ], calc:{q:"First-year price €29.99, renewal €69.99. Step-up in %?", ans:133.4, tol:0.5, unit:"%", sol:"69.99 ÷ 29.99 − 1 ≈ 133.4%."}}},
+
+{title:"Module 3 · Competitiveness", slides:[
+ {title:"Compare like for like", html:`
+  <ul class="pts check"><li>Same number of devices and same term</li><li><b>Intro and renewal prices separately</b></li><li>Same tax basis: EU prices include VAT, US prices usually exclude sales tax</li><li>Same currency, at a stated FX rate</li><li>Comparable feature set: Standard vs Plus vs Premium</li></ul>`,
+  say:["A competitive price index is our price divided by a competitor's price, or by the competitor median.",
+       "The comparison set for consumer security usually includes brands like Norton, McAfee, Bitdefender, ESET and Avast.",
+       "The key is comparing like for like: same devices, same term, intro and renewal prices separately, and the same tax basis.",
+       "European consumer prices include VAT, while US prices usually exclude sales tax, so normalise before converting currency."]},
+ {title:"Weight the index", html:`
+  <table class="mini"><tr><th>Market</th><th>Index</th><th>Revenue weight</th></tr>
+   <tr><td>Germany</td><td>1.05</td><td>40</td></tr><tr><td>US</td><td>0.92</td><td>35</td></tr><tr><td>Brazil</td><td>1.20</td><td>25</td></tr></table>
+  <p class="note">Weighted <b>1.042</b> · simple average 1.057</p>`,
+  say:["To get a global view, weight the index by revenue.",
+       "Here Germany is five percent above competitors, the US eight percent below, and Brazil twenty percent above.",
+       "The revenue-weighted index is 1.042. The simple average would be 1.057, because it gives small Brazil the same influence as large markets."]},
+ {title:"Crawler coverage and freshness", html:`
+  <ul class="pts"><li>% of competitor SKUs and markets matched</li><li>Age of the latest observation</li><li>Promo detection: temporary vs permanent prices</li></ul>`,
+  say:["Competitive monitoring is only as good as its data.",
+       "Track crawler coverage, the share of competitor products and markets you can match, and freshness, the age of the last observation.",
+       "Stale data on promotion-heavy competitors can be worse than no data."]},
+], quiz:{mcq:[
+  {q:"The best way to compare your price with competitors is…", o:["Headline homepage prices","Each brand's cheapest offer","Same devices and term, intro and renewal separately","Annual revenue"], a:2, e:"Like-for-like comparison avoids false conclusions."},
+  {q:"Comparing a German price (VAT included) with a US price requires…", o:["Nothing","Normalising tax before converting currency","Only converting currency","PPP only"], a:1, e:"EU prices include VAT; US prices usually exclude sales tax."},
+ ], calc:{q:"Index: Germany 1.05 (weight 40), US 0.92 (35), Brazil 1.20 (25). Weighted index?", ans:1.042, tol:0.002, unit:"", sol:"(42 + 32.2 + 30) ÷ 100 = 1.042."}}},
+
+{title:"Module 4 · Governance & harmonization", slides:[
+ {title:"FX drift", html:`
+  <p class="big-formula">Drift = FX at last update ÷ current FX − 1</p>
+  <ul class="pts"><li>1,749 TRY set at EUR/TRY 35 → <b>€49.97</b></li><li>Now EUR/TRY 42 → <b>€41.64</b>, drift <b>−16.7%</b></li><li>Restoring ~€49.99 needs ≈ 2,099 TRY — check affordability first</li></ul>`,
+  say:["FX drift measures how far a local price has moved from its target in the base currency.",
+       "A Turkish price of 1,749 lira was set when one euro cost 35 lira, worth about 50 euros.",
+       "Now the euro costs 42 lira, so the same price is worth about 41 euros 64, a drift of minus 16.7 percent.",
+       "Restoring the euro value would need about 2,099 lira, but check affordability and local competitors before passing it through fully.",
+       "Pre-agreed drift thresholds turn repricing into a routine instead of a crisis."]},
+ {title:"Dispersion, corridors and channel parity", html:`
+  <ul class="pts"><li>Large cross-market spread → <b>arbitrage</b>: VPN purchases, grey-market keys</li><li>Define price <b>corridors</b> per region; some spread is intended</li><li>Channel parity: web vs app store vs retail vs marketplace</li></ul>`,
+  say:["When prices differ too much between countries, customers and resellers exploit it, for example buying through a VPN or reselling keys on marketplaces.",
+       "Global teams therefore define price corridors: acceptable ranges, with intended differences for purchasing power.",
+       "Channel parity matters too: the same product should not be priced in conflicting ways across web, app stores, retail and marketplaces."]},
+ {title:"Controls and execution", html:`
+  <ul class="pts"><li><b>Floor-price & margin breaches</b> — checked after stacked discounts</li><li><b>Pricing accuracy</b> — errors per release, % validated before go-live</li><li><b>On-time implementation</b> and revenue at risk from delays</li></ul>`,
+  say:["Finally, governance metrics protect margin and execution.",
+       "Floor-price and margin breaches must be checked after all stacked discounts, not only on the list price.",
+       "Pricing accuracy tracks errors found in production and the share of changes validated in every channel before go-live.",
+       "And implementation tracking shows whether approved changes went live on time, and how much revenue is at risk from delays."]},
+], quiz:{mcq:[
+  {q:"The lira lost value vs the euro; the TRY price is unchanged. FX drift in EUR is…", o:["Positive","Negative","Zero","Unknown"], a:1, e:"Same local price ÷ more lira per euro = fewer euros."},
+  {q:"Large cross-market dispersion mainly creates risk of…", o:["Higher conversion","Arbitrage via VPN and grey-market keys","Lower crawler coverage","Higher retailer margin"], a:1, e:"That's why global pricing uses corridors."},
+  {q:"A floor price should be checked…", o:["Only on the list price","After all stacked discounts and promotions","Only in retail","Once a year"], a:1, e:"Stacked promos can push the effective price below the floor."},
+ ], calc:{q:"1,749 TRY set at EUR/TRY 35; now 42. FX drift in EUR, in %?", ans:-16.7, tol:0.2, unit:"%", sol:"35 ÷ 42 − 1 = −16.7%."}}},
+
+{title:"Module 5 · Portfolios", slides:[
+ {title:"eSIM margin", html:`
+  <table class="mini"><tr><th>10 GB plan at $24.99</th><th>Billed per GB used</th><th>Billed per GB sold</th></tr>
+   <tr><td>Data cost ($1.20/GB)</td><td>7 GB → $8.40</td><td>10 GB → $12.00</td></tr>
+   <tr><td>Fees 6%</td><td>$1.50</td><td>$1.50</td></tr>
+   <tr><td>Gross margin</td><td><b>60.4%</b></td><td><b>46.0%</b></td></tr></table>`,
+  say:["eSIM economics depend on supplier cost per gigabyte, which varies a lot by destination.",
+       "Take a 10 gigabyte plan at 24 dollars 99, a supplier cost of 1 dollar 20 per gigabyte, and payment fees of six percent.",
+       "If the supplier bills per gigabyte actually used, and customers use seventy percent of their data, margin is about sixty percent.",
+       "If the supplier bills per gigabyte sold, margin falls to forty-six percent.",
+       "So always know the billing basis, track utilization and top-up rates, and compare price per gigabyte with travel eSIM competitors."]},
+ {title:"Standalone, KSOS and Retail", html:`
+  <ul class="pts"><li><b>Standalone</b>: revenue and margin per market; watch <b>cannibalization</b> of bundles</li><li><b>KSOS B2B</b>: price per seat, seat-band mix, <b>NRR</b> &gt; 100% = growth from existing customers</li><li><b>Retail</b>: sell-in vs sell-through price, retailer margin, promo lift</li></ul>`,
+  say:["For standalone products, review revenue and margin by market each quarter, and check cannibalization: whether bundle buyers move to cheaper standalone products.",
+       "For small-business products, track price per seat, the mix of seat bands, and net revenue retention. Above one hundred percent means existing customers grow faster than they leave.",
+       "In retail, compare sell-in price to the retailer with sell-through price to the consumer, and keep shelf promotions consistent with digital prices."]},
+], quiz:{mcq:[
+  {q:"Supplier bills per GB used; customers use 70% of data. Breakage…", o:["Has no effect","Increases margin","Decreases margin","Only affects revenue recognition"], a:1, e:"You charge for 100% of the plan but pay for 70%."},
+  {q:"KSOS net revenue retention of 108% means…", o:["8% churned","Existing-customer revenue grew 8% net of churn","New customers added 8%","Prices rose 8%"], a:1, e:"Expansion outweighs contraction and churn."},
+ ], calc:{q:"10 GB eSIM at $24.99, cost $1.20 per GB used, 70% utilization, fees 6%. Gross margin in %?", ans:60.4, tol:0.5, unit:"%", sol:"(24.99 − 8.40 − 1.50) ÷ 24.99 ≈ 60.4%."}}},
+
+{title:"Module 6 · Putting it to work", slides:[
+ {title:"Annual Price Review in five steps", html:`
+  <ol class="pts"><li><b>Inputs</b>: ARPU, conversion, renewals, realization, price index, FX drift, costs</li><li><b>Recommendations</b>: raise / hold / cut with revenue and margin impact</li><li><b>Approval</b>: Product, Finance, regions; documented in the workflow</li><li><b>Implementation</b>: calendar per channel, validation before and after go-live</li><li><b>Tracking</b>: post-change cohorts vs control, realised vs expected</li></ol>`,
+  say:["Here is how these metrics come together in an annual price review.",
+       "First, gather inputs: performance by market and tier, competitive index, FX drift and cost changes.",
+       "Second, recommend where to raise, hold or cut prices, with expected revenue and margin impact.",
+       "Third, align and approve with Product, Finance and regional teams.",
+       "Fourth, implement with a calendar per channel and validate prices before and after go-live.",
+       "Fifth, track the results against a control group and report realised versus expected impact."]},
+ {title:"Scenario: a competitor cuts prices 20%", html:`
+  <ul class="pts"><li>Verify: which products, intro or renewal, temporary or permanent</li><li>Measure our exposure: conversion and traffic since the change</li><li>Model scenarios: no action, targeted promo, list change</li><li>Prefer targeted responses; avoid a price war; use non-price levers</li></ul>`,
+  say:["A typical interview scenario: a major competitor cuts prices by twenty percent in one market.",
+       "Don't react by reflex. Verify the change with crawler data, measure the impact on our conversion, and model a few scenarios with expected revenue and margin.",
+       "Usually a targeted response on specific tiers or intro offers beats a full list price cut."]},
+ {title:"Excel impact model", html:`
+  <ul class="pts"><li><b>Power Query</b>: load and merge sales, prices, proposed prices, FX</li><li><b>XLOOKUP</b>: exact-match mapping by SKU × market</li><li>New volume = base × (new ÷ old price)<sup>E</sup></li><li>Pivot tables, scenario switch, checks for floors and step-ups</li></ul>`,
+  say:["For the test assignment, be ready to build a price-change impact model in Excel.",
+       "Use Power Query to load and merge sales, current and proposed prices and FX rates.",
+       "Map prices with exact-match lookups, estimate new volume with an elasticity assumption, and summarise revenue and margin with pivot tables.",
+       "Add checks for floor prices and renewal step-ups, and a switch between low, base and high elasticity scenarios."]},
+ {title:"Recap: the ten metrics to know", html:`
+  <ol class="pts two"><li>Net price realization</li><li>ARPU per license-year</li><li>Renewal rate & churn after changes</li><li>Intro-to-renewal step-up</li><li>Price elasticity</li><li>Weighted price index</li><li>Price–volume–mix</li><li>Dispersion & FX drift</li><li>Floor/margin breaches & accuracy</li><li>eSIM margin per destination</li></ol>`,
+  say:["To recap, the ten metrics to know are:",
+       "net price realization, ARPU per license-year, renewal rate and churn after price changes, and the intro-to-renewal step-up.",
+       "Then price elasticity, the weighted competitive index, and price, volume, mix.",
+       "And for governance and portfolios: dispersion and FX drift, floor and margin breaches with pricing accuracy, and eSIM margin per destination.",
+       "One final checkpoint, and you're done. Good luck with your interview!"]},
+], quiz:{mcq:[
+  {q:"The most reliable way to measure an annual price increase is…", o:["This month vs last month","Post-change cohort vs pre-change cohort or control market, over the renewal cycle","Ask sales","Conversion on the day of change"], a:1, e:"Effects appear over months; seasonality must be controlled."},
+  {q:"A 25% markup equals a gross margin of…", o:["25%","20%","33%","75%"], a:1, e:"25 ÷ 125 = 20%."},
+ ], calc:{q:"100,000 renewals at €50, rate 60%. Price +10%, rate falls to 56%. Change in renewal revenue, %?", ans:2.67, tol:0.05, unit:"%", sol:"€3.00M → €3.08M ≈ +2.7%, but 4,000 fewer customers."}}},
+];
+
+/* ---------- build the sequence ---------- */
+const ITEMS = [];
+MODULES.forEach((m, mi) => {
+  m.slides.forEach((s, si) => ITEMS.push({kind:"slide", mi, si, mod:m.title, ...s}));
+  if (m.quiz) ITEMS.push({kind:"quiz", mi, mod:m.title, title:"Checkpoint", quiz:m.quiz});
+});
+const $ = id => document.getElementById(id);
+const stage = $("stage"), body = $("sbody"), cap = $("caption");
+const S = {idx:0, step:0, playing:false, mode:"interactive", rate:1, voice:null, captions:true, answers:{}};
+const tts = "speechSynthesis" in window;
+let token = 0, timers = [];
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+const L = i => "ABCD"[i];
+
+/* ---------- voices ---------- */
+function loadVoices(){
+  if (!tts) { $("voice").innerHTML = `<option>No speech in this browser — captions only</option>`; return; }
+  const vs = speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang));
+  if (!vs.length) return;
+  const score = v => (/natural|neural/i.test(v.name) ? 40 : 0) + (/aria|jenny|guy|sonia|libby|ryan/i.test(v.name) ? 15 : 0)
+    + (/google/i.test(v.name) ? 20 : 0) + (/samantha|daniel|karen|moira/i.test(v.name) ? 10 : 0) + (/en-(us|gb)/i.test(v.lang) ? 5 : 0);
+  vs.sort((a, b) => score(b) - score(a));
+  $("voice").innerHTML = vs.map((v, i) => `<option value="${i}">${esc(v.name)} (${v.lang})</option>`).join("");
+  $("voice")._list = vs;
+  S.voice = vs[0];
+}
+if (tts) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; } else loadVoices();
+$("voice").onchange = e => { S.voice = e.target._list ? e.target._list[+e.target.value] : null; };
+
+/* ---------- speech engine ---------- */
+function later(fn, ms){ const t = setTimeout(fn, ms); timers.push(t); return t; }
+function stopAll(){ token++; timers.forEach(clearTimeout); timers = []; if (tts) speechSynthesis.cancel(); }
+function speakOne(text, cb){
+  setCaption(text);
+  const words = text.split(/\s+/).length;
+  if (!tts || !S.voice || $("mute").checked) { later(cb, Math.max(1600, words / (2.7 * S.rate) * 1000)); return; }
+  const u = new SpeechSynthesisUtterance(text);
+  u.voice = S.voice; u.lang = S.voice.lang; u.rate = S.rate;
+  let done = false;
+  const fin = () => { if (!done) { done = true; cb(); } };
+  u.onend = fin; u.onerror = fin;
+  later(fin, Math.max(5000, words / (1.6 * S.rate) * 1000 + 3000));   // safety net if onend never fires
+  speechSynthesis.speak(u);
+}
+function setCaption(t){ cap.textContent = t || ""; cap.hidden = !S.captions || !t; }
+
+/* ---------- steps per item ---------- */
+function stepsFor(item){
+  if (item.kind === "slide") return item.say.map(t => ({say:t}));
+  const q = item.quiz, st = [];
+  if (S.mode === "interactive") return [{say:"Checkpoint. Answer the questions, then press Continue."}];
+  st.push({on:() => renderQuizVideo(item, -1), say:"Checkpoint. Pause the video whenever you want more time to think."});
+  q.mcq.forEach((m, k) => {
+    st.push({on:() => renderQuizVideo(item, k, false), say:`Question ${k + 1}. ${m.q}`});
+    st.push({say:m.o.map((o, i) => `${L(i)}: ${o}.`).join(" ")});
+    st.push({wait:5000, on:() => countdown(5)});
+    st.push({on:() => renderQuizVideo(item, k, true), say:`The answer is ${L(m.a)}: ${m.o[m.a]}. ${m.e}`});
+  });
+  st.push({on:() => renderCalcVideo(item, false), say:`Calculation. ${q.calc.q.replace(/\?$/, "")}.`});
+  st.push({wait:8000, on:() => countdown(8)});
+  st.push({on:() => renderCalcVideo(item, true), say:`The answer is ${q.calc.ans}${q.calc.unit === "%" ? " percent" : ""}. ${q.calc.sol}`});
+  return st;
+}
+function run(){
+  stopAll();
+  const my = token, item = ITEMS[S.idx], steps = stepsFor(item);
+  const go = () => {
+    if (my !== token) return;
+    if (S.step >= steps.length) {
+      setCaption("");
+      if (item.kind === "quiz" && S.mode === "interactive") { setPlaying(false); return; }
+      if (S.idx < ITEMS.length - 1) later(() => { if (my === token) { S.idx++; S.step = 0; render(); run(); } }, 900);
+      else { setPlaying(false); setCaption("End of the lecture."); }
+      return;
+    }
+    const s = steps[S.step];
+    if (s.on) s.on();
+    const next = () => { if (my === token) { S.step++; go(); } };
+    if (s.say) speakOne(s.say, next); else later(next, s.wait || 0);
+  };
+  go();
+}
+function setPlaying(p){ S.playing = p; $("play").textContent = p ? "❚❚ Pause" : "▶ Play"; $("play").setAttribute("aria-label", p ? "Pause" : "Play"); }
+function play(){ if (S.playing) { setPlaying(false); stopAll(); return; } setPlaying(true); run(); }
+function goto(i){ stopAll(); S.idx = Math.max(0, Math.min(ITEMS.length - 1, i)); S.step = 0; render(); if (S.playing) run(); }
+
+/* ---------- rendering ---------- */
+function render(){
+  const it = ITEMS[S.idx];
+  $("modlabel").textContent = it.mod;
+  $("count").textContent = `${S.idx + 1} / ${ITEMS.length}`;
+  $("bar").style.width = ((S.idx + 1) / ITEMS.length * 100) + "%";
+  setCaption("");
+  if (it.kind === "slide") body.innerHTML = `<h2>${esc(it.title)}</h2><div class="content">${it.html}</div>`;
+  else if (S.mode === "interactive") renderQuizInteractive(it);
+  else renderQuizVideo(it, -1);
+  document.querySelectorAll("#chapters button").forEach(b => b.setAttribute("aria-current", ITEMS[S.idx].mi === +b.dataset.mi ? "true" : "false"));
+}
+function renderQuizVideo(it, k, reveal){
+  if (k < 0) { body.innerHTML = `<h2>Checkpoint</h2><div class="content"><p class="lead">${it.quiz.mcq.length} questions and one calculation.</p><p class="lead muted">Pause the video if you need more time.</p></div>`; return; }
+  const m = it.quiz.mcq[k];
+  body.innerHTML = `<h2>Question ${k + 1}</h2><div class="content"><p class="qtext">${esc(m.q)}</p>
+    <div class="vopts">${m.o.map((o, i) => `<div class="vopt${reveal && i === m.a ? " right" : ""}${reveal && i !== m.a ? " dim" : ""}"><b>${L(i)}</b>${esc(o)}</div>`).join("")}</div>
+    ${reveal ? `<p class="expl">${esc(m.e)}</p>` : `<div class="cd" id="cd"></div>`}</div>`;
+}
+function renderCalcVideo(it, reveal){
+  const c = it.quiz.calc;
+  body.innerHTML = `<h2>Calculation</h2><div class="content"><p class="qtext">${esc(c.q)}</p>
+    ${reveal ? `<p class="answer">${c.ans}${esc(c.unit)}</p><p class="expl">${esc(c.sol)}</p>` : `<div class="cd" id="cd"></div>`}</div>`;
+}
+function countdown(n){ const el = document.getElementById("cd"); if (!el) return; let k = n; el.textContent = k; const tick = () => { k--; const e2 = document.getElementById("cd"); if (e2 && k > 0) { e2.textContent = k; later(tick, 1000); } }; later(tick, 1000); }
+function renderQuizInteractive(it){
+  const q = it.quiz, A = S.answers[S.idx] || (S.answers[S.idx] = {mcq:{}, calc:null, val:""});
+  body.innerHTML = `<h2>Checkpoint</h2><div class="content scroll">
+    ${q.mcq.map((m, k) => {
+      const pick = A.mcq[k], done = pick !== undefined;
+      return `<div class="iq"><p class="iqq">${k + 1}. ${esc(m.q)}</p><div class="iopts">${m.o.map((o, i) => `<button class="iopt${done && i === m.a ? " right" : ""}${done && i === pick && i !== m.a ? " wrong" : ""}" data-k="${k}" data-i="${i}"${done ? " disabled" : ""}><b>${L(i)}</b> ${esc(o)}</button>`).join("")}</div>
+        ${done ? `<p class="fb ${pick === m.a ? "ok" : "bad"}">${pick === m.a ? "Correct." : "Not quite."} ${esc(m.e)}</p>` : ""}</div>`;
+    }).join("")}
+    <div class="iq"><p class="iqq">Calculation. ${esc(q.calc.q)}</p>
+      <div class="crow"><input id="cin" inputmode="decimal" value="${esc(A.val)}" aria-label="Your answer"><span>${esc(q.calc.unit)}</span><button class="sbtn" id="cchk">Check</button><button class="sbtn ghost" id="csol">Show solution</button></div>
+      ${A.calc ? `<p class="fb ${A.calc.ok ? "ok" : "bad"}">${esc(A.calc.msg)}</p>` : ""}</div>
+    <div class="crow end"><button class="sbtn primary" id="cont">Continue →</button></div></div>`;
+  body.querySelectorAll(".iopt").forEach(b => b.onclick = () => { A.mcq[b.dataset.k] = +b.dataset.i; keepScroll(() => renderQuizInteractive(it)); });
+  const cin = document.getElementById("cin");
+  cin.oninput = () => { A.val = cin.value; };
+  cin.onkeydown = e => { if (e.key === "Enter") document.getElementById("cchk").click(); e.stopPropagation(); };
+  document.getElementById("cchk").onclick = () => {
+    const v = parseFloat(A.val.replace(/\s/g, "").replace(",", ".").replace(/[%€$]/g, "")), c = q.calc;
+    if (isNaN(v)) A.calc = {ok:false, msg:"Enter a number."};
+    else if (Math.abs(v - c.ans) <= c.tol) A.calc = {ok:true, msg:`Correct: ${c.ans}${c.unit}. ${c.sol}`};
+    else if (c.unit === "%" && Math.abs(v * 100 - c.ans) <= c.tol) A.calc = {ok:false, msg:"Looks like a fraction — answer in percent."};
+    else A.calc = {ok:false, msg:"Not quite — try again or show the solution."};
+    keepScroll(() => renderQuizInteractive(it));
+  };
+  document.getElementById("csol").onclick = () => { A.calc = {ok:false, msg:`Answer: ${q.calc.ans}${q.calc.unit}. ${q.calc.sol}`}; keepScroll(() => renderQuizInteractive(it)); };
+  document.getElementById("cont").onclick = () => { setPlaying(true); goto(S.idx + 1); };
+}
+function keepScroll(fn){ const sc = body.querySelector(".scroll"); const y = sc ? sc.scrollTop : 0; fn(); const s2 = body.querySelector(".scroll"); if (s2) s2.scrollTop = y; }
+
+/* ---------- controls ---------- */
+$("play").onclick = play;
+$("prev").onclick = () => goto(S.idx - 1);
+$("next").onclick = () => goto(S.idx + 1);
+$("rate").onchange = e => { S.rate = +e.target.value; };
+$("captions").onchange = e => { S.captions = e.target.checked; setCaption(cap.textContent); };
+$("mode").onchange = e => { S.mode = e.target.value; goto(S.idx); };
+$("fs").onclick = () => { (stage.requestFullscreen || stage.webkitRequestFullscreen || (() => {})).call(stage); };
+$("chapters").innerHTML = MODULES.map((m, i) => `<button data-mi="${i}">${esc(m.title)}</button>`).join("");
+document.querySelectorAll("#chapters button").forEach(b => b.onclick = () => goto(ITEMS.findIndex(it => it.mi === +b.dataset.mi)));
+document.addEventListener("keydown", e => {
+  if (e.target.closest("input,select,textarea")) return;
+  if (e.key === " ") { e.preventDefault(); play(); }
+  if (e.key === "ArrowRight") goto(S.idx + 1);
+  if (e.key === "ArrowLeft") goto(S.idx - 1);
+  if (e.key === "f" || e.key === "F") $("fs").click();
+});
+render();
+
+</script>
+</body>
+</html>
