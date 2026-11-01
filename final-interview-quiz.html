@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Final interview quiz — global pricing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F4F9;--surface:#FFFFFF;--ink:#1C1730;--muted:#615A75;--line:#E3E0EC;--accent:#5B21B6;--accent-ink:#fff;--accent-soft:#EEE7FB;--pink:#B8166F;--pink-soft:#FBE6F1;--ok:#17784F;--ok-soft:#E3F4EC;--warn:#B45309;--warn-soft:#FDF0DE;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14111D;--surface:#1E1A2B;--ink:#ECE9F5;--muted:#A39CB8;--line:#332D45;--accent:#A47BF0;--accent-ink:#14111D;--accent-soft:#2B2342;--pink:#F06BB4;--pink-soft:#3A1D30;--ok:#4CC38A;--ok-soft:#17332A;--warn:#F2A54A;--warn-soft:#3A2A14;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14111D;--surface:#1E1A2B;--ink:#ECE9F5;--muted:#A39CB8;--line:#332D45;--accent:#A47BF0;--accent-ink:#14111D;--accent-soft:#2B2342;--pink:#F06BB4;--pink-soft:#3A1D30;--ok:#4CC38A;--ok-soft:#17332A;--warn:#F2A54A;--warn-soft:#3A2A14;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Onest",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+button:disabled{opacity:.5;cursor:default}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:860px;margin:0 auto;padding:30px 20px 60px}
+h1{font-size:clamp(26px,4vw,38px);line-height:1.08;margin:0 0 6px;letter-spacing:-.02em}
+.lede{color:var(--muted);margin:0 0 22px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:14px}
+.h{font-size:22px;margin:0 0 8px;letter-spacing:-.01em}
+.sub{font-size:13px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:22px 0 10px}
+.muted{color:var(--muted);margin:0 0 8px}.small{font-size:14px;margin-top:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);padding:6px 13px;border-radius:999px;font-size:14px;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip .n{opacity:.6;margin-left:2px}
+.chip-s{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--warn-soft);color:var(--warn)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.row.start{margin-top:22px}.row.end{justify-content:flex-end;margin-top:18px}
+.btn{border:1px solid var(--line);background:var(--surface);padding:9px 16px;border-radius:10px;font-weight:600;font-size:15px}
+.btn:hover:not(:disabled){border-color:var(--muted)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.ghost{background:transparent}.btn.small{font-size:14px;padding:6px 12px}
+.progress{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted);margin:0 0 12px}
+.bar{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.top{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.tag{font-size:12.5px;font-weight:700;padding:3px 10px;border-radius:6px;background:var(--accent-soft);color:var(--accent)}
+.qq{font-size:20px;line-height:1.4;margin:0 0 16px;font-weight:650;letter-spacing:-.005em}
+.opts{display:grid;gap:9px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;border:1.5px solid var(--line);background:var(--bg);border-radius:12px;padding:12px 14px;font-size:15.5px;line-height:1.45}
+.opt .k{flex:none;font-weight:700;color:var(--accent);min-width:18px}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.picked{border-color:var(--accent);background:var(--accent-soft)}
+.opt:disabled{cursor:default;opacity:1}
+.opt.right{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}.opt.right .k{color:var(--ok)}
+.opt.wrong{border-color:var(--pink);background:var(--pink-soft);color:var(--pink)}.opt.wrong .k{color:var(--pink)}
+.fb{margin-top:16px;padding:12px 14px;border-radius:10px;font-size:15px}
+.fb.ok{background:var(--ok-soft);color:var(--ok)}.fb.bad{background:var(--pink-soft);color:var(--pink)}
+.tip{margin:10px 0 0;padding:10px 14px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 10px 10px 0;font-size:14.5px}
+.keys{font-size:12.5px;color:var(--muted);margin:12px 0 0;text-align:right}
+.topics{display:grid;gap:10px;margin-top:14px}
+.trow{display:grid;grid-template-columns:220px 1fr 44px;gap:12px;align-items:center;font-size:14.5px}
+.tbar{height:10px;background:var(--line);border-radius:5px;overflow:hidden}.tbar i{display:block;height:100%}
+.tn{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.rcard .rq{font-size:16.5px;margin:0 0 8px;font-weight:650}
+.ans{margin:0 0 8px;padding-left:20px;color:var(--ok);font-weight:600}
+.expl{margin:0;font-size:14.5px;color:var(--muted)}
+@media (max-width:560px){.wrap{padding:20px 12px 50px}.card{padding:18px 16px}.qq{font-size:18px}.trow{grid-template-columns:120px 1fr 40px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Final interview quiz</h1>
+<p class="lede">Global pricing analyst · realization, PVM, renewals, elasticity, eSIM, governance, market and stakeholders.</p>
+<main id="app"></main>
+</div>
+<script>
+const TOPICS = {
+  real: "Realization & revenue", pvm: "Price–volume–mix", ren: "Renewals & break-even",
+  ela: "Elasticity, discounts & LTV", esim: "eSIM economics", gov: "Governance & FX",
+  mkt: "Market & Kaspersky", proc: "Process & stakeholders"
+};
+const Q = [
+/* ---------- Realization ---------- */
+{t:"real", q:"GMV grew 12% year over year, but net revenue grew only 3%. List prices didn't change. What is the most likely explanation?",
+ o:["A drop in the renewal rate","More sales through channels with higher fees and deeper promotions (app stores, partners, marketplaces)","A stronger euro","Higher supplier costs"],
+ a:1, e:"GMV counts what customers paid; net revenue is what's left after fees, partner margins, discounts and refunds. With list prices flat, a widening gap points to channel mix and promo depth. Renewals would affect both; supplier costs affect margin, not revenue.",
+ tip:"Say: “I’d build the price waterfall by channel and see which deduction grew fastest.”"},
+{t:"real", multi:true, q:"Which items belong in the price waterfall between list price (ex-VAT) and net price? Select all that apply.",
+ o:["Promo discount","App-store commission","Refunds and chargebacks","Partner / retailer margin","eSIM supplier data cost","Marketing spend"],
+ a:[0,1,2,3], e:"The waterfall tracks price leakage — what the customer pays that Kaspersky doesn't keep. Supplier data cost and marketing are costs, not price deductions: they belong in margin, not in realization.",
+ tip:"Keep realization (price) and margin (cost) separate — mixing them is a common mistake."},
+{t:"real", q:"A customer pays €60 upfront in December for a 12-month subscription. How is it reflected?",
+ o:["€60 revenue in December","€60 bookings in December; revenue recognised as €5 per month over 12 months","€60 revenue next December","Revenue only when the customer renews"],
+ a:1, e:"Bookings capture the contract value when sold; revenue is recognised over the service period. Pricing changes therefore show up in bookings immediately but in recognised revenue gradually.",
+ tip:"Useful when Finance asks why a price increase “isn’t visible yet” in revenue."},
+{t:"real", q:"Your manager compares net revenue per unit across markets and concludes Germany is “more expensive” than Brazil by 2.5×. What should you check first?",
+ o:["Nothing — the numbers speak for themselves","Whether units are comparable: device count, term length, tier mix — normalise to revenue per license-year","Whether Brazil had a promotion last week","Crawler coverage"],
+ a:1, e:"A market selling more multi-device or 2-year plans looks more expensive per unit. Normalising to license-years or device-years makes markets comparable before any price conclusion.",
+ tip:"“Like for like first, then compare.”"},
+
+/* ---------- PVM ---------- */
+{t:"pvm", q:"At product level, PVM shows a price effect of −€200k. At market × product × channel level, the price effect is +€50k and mix is −€250k. What is most likely happening?",
+ o:["Prices were cut across the board","Sales shifted towards channels or markets with lower net prices (e.g. Mobile, emerging markets) — invisible as mix at product level","The calculation is wrong; effects must be identical","FX moved"],
+ a:1, e:"Mix only exists between the items you list. At product level, a shift to cheaper channels or markets lowers the average product price and shows up as a ‘price’ decline. At SKU level the same shift is correctly reported as mix.",
+ tip:"Always state the level of detail of a PVM bridge."},
+{t:"pvm", q:"Turkey raised local prices by 30%, but EUR revenue is flat. How do you present it?",
+ o:["Price effect zero — revenue didn’t move","Price effect at constant (base-period) FX plus a separate negative FX line","Report everything at current FX and call it a price decline","Exclude Turkey from the bridge"],
+ a:1, e:"Measuring price at base-period FX shows the real local price increase; a separate FX line shows the currency headwind. Otherwise local teams are judged on currency moves they don't control.",
+ tip:"“Price at constant currency, FX as its own bar.”"},
+{t:"pvm", q:"A new Premium Family plan launched mid-year. Where should its revenue go in the PVM bridge?",
+ o:["Mix effect","Price effect","A separate ‘new products’ line","Volume effect"],
+ a:2, e:"A product sold in only one period has no base price, so forcing it into mix or price distorts both. New and discontinued products get their own lines; volume, mix and price are computed on continuing items.",
+ tip:"Same for discontinued products — separate line, negative."},
+{t:"pvm", q:"After the Annual Price Review, PVM shows +€1.4M price and −€0.6M volume. A stakeholder says: “The price increase cost us €0.6M of volume.” Your response?",
+ o:["Agree — the bridge proves it","PVM attributes the change, it doesn’t prove causality. To know what the increase caused, compare with control markets or use an elasticity model","Disagree — volume and price are unrelated","Remove the volume line"],
+ a:1, e:"The volume decline may come from seasonality, competitors or the market. PVM tells you where revenue changed, not why. Causal claims need a counterfactual.",
+ tip:"“Attribution, not causality.”"},
+{t:"pvm", q:"Customers increasingly buy 2-year plans instead of 1-year plans. If you run PVM on ‘units = licences sold’, what happens?",
+ o:["Nothing changes","The longer term shows up as a price increase (higher price per unit) — normalise to license-years","It shows up as FX","It shows up as a new product"],
+ a:1, e:"A 2-year licence costs more than a 1-year licence, so a term shift raises the average ‘price per unit’ without any price change. Normalising units to license-years puts the effect in mix where it belongs.",
+ tip:"Units must mean the same thing in both periods."},
+
+/* ---------- Renewals ---------- */
+{t:"ren", q:"After a renewal price increase in DE/FR/UK, their renewal rate moved −1.7 pp. In control markets without a change it moved +2.2 pp. What is the best estimate of the effect?",
+ o:["−1.7 pp","+0.5 pp","−3.9 pp","−2.2 pp"],
+ a:2, e:"Difference-in-differences: (−1.7) − (+2.2) = −3.9 pp. The naive before/after misses that the treated markets would have improved with the common trend.",
+ tip:"Name the method: difference-in-differences with control markets."},
+{t:"ren", q:"What is the key assumption behind a difference-in-differences estimate, and how do you check it?",
+ o:["Markets have equal size — check revenue","Treated and control would have moved in parallel without the change — check pre-period trends and run placebo tests","Prices are random — check the price list","Renewal rates are normally distributed — check a histogram"],
+ a:1, e:"Parallel trends is the core assumption. Look at the pre-change period: if treated and control already diverge, the estimate is biased. Placebo tests on earlier dates help.",
+ tip:"Mentioning placebo tests signals seniority."},
+{t:"ren", q:"Why is the long-term break-even renewal rate stricter than the short-term one?",
+ o:["Because of VAT","Each lost customer also takes away all future renewals, not just this payment","Because refunds happen later","It isn’t — they are always equal"],
+ a:1, e:"Short-term break-even compares this year's renewal revenue; long-term compares the value of all future renewals. A lost customer costs a stream of payments, so less churn is tolerable.",
+ tip:"Example: 60% base, +10% price → 54.5% short-term vs 57.7% long-term."},
+{t:"ren", q:"Which customers typically react most strongly to a renewal price increase?",
+ o:["Long-tenure customers with auto-renewal","First-time renewers and customers who renew manually","Customers on the most expensive tier","Customers in markets with low inflation"],
+ a:1, e:"First renewers haven't built a habit yet, and manual renewers actively decide at the new price. Loyal auto-renewers react least. Hence the common recommendation to protect the first renewal.",
+ tip:"Turn it into an action: “smaller step-up or loyalty offer at first renewal.”"},
+{t:"ren", q:"A renewal price increase brings +2.7% renewal revenue this year, but the renewal rate fell from 60% to 56%. What do you recommend?",
+ o:["Approve — revenue is up","Reject — customers were lost","It depends: 56% is above the short-term but below the long-term break-even, so check segment results and agree whether the goal is this year’s revenue or lifetime value","Raise prices further"],
+ a:2, e:"56% sits in the ‘danger zone’: short-term win, long-term loss. The right answer frames the trade-off, looks at segments (often fine for loyal customers, bad for first renewals) and asks for the agreed horizon.",
+ tip:"Never answer price questions with a bare yes/no — give the condition."},
+{t:"ren", multi:true, q:"You raise renewal prices with auto-renewal. Which guardrail metrics should you track besides renewal revenue? Select all that apply.",
+ o:["Refund rate","Complaints and chargebacks","Second-year renewal rate of the affected cohort","Crawler coverage","Net price realization in retail"],
+ a:[0,1,2], e:"Auto-renewal price jumps often show up as refunds, complaints and chargebacks after the charge, and as churn a year later. Crawler coverage and retail realization are unrelated to this decision.",
+ tip:"Refunds are the hidden cost of auto-renewal increases."},
+{t:"ren", q:"A highly loyal segment renews at 80%. You consider a 10% increase. Which statement is true?",
+ o:["Loyal customers can absorb any increase","Short-term the renewal rate may fall to ~72.7%, but long-term only to ~78.4% — very little room","Loyal segments have higher break-evens on both horizons equally","Break-even doesn’t depend on the base rate"],
+ a:1, e:"The more loyal the segment, the more each lost customer is worth, so the long-term tolerance shrinks to about 1.6 pp even though short-term looks comfortable.",
+ tip:"Counter-intuitive insights like this are memorable in interviews."},
+
+/* ---------- Elasticity ---------- */
+{t:"ela", q:"A price-only regression gives elasticity −1.7, but most deep promotions were accompanied by email and banner campaigns. The true elasticity is most likely…",
+ o:["More elastic (e.g. −2.5)","Less elastic, closer to zero (e.g. −1.0)","Exactly −1.7","Positive"],
+ a:1, e:"Marketing lifts sales in the same weeks prices drop, and the price-only model credits that lift to the price cut. Controlling for marketing reduces the estimated sensitivity.",
+ tip:"Say the general rule: prices aren't set randomly — that biases naive estimates."},
+{t:"ela", q:"What is the most reliable way to estimate price elasticity before a big price decision?",
+ o:["Ask Sales","Regression on all historical data without controls","A randomised price test or a comparison with control markets","Copy the elasticity of a competitor"],
+ a:2, e:"Randomisation (or a good control group) separates the effect of price from seasonality, marketing and competitors. Observational regressions with controls are second best.",
+ tip:"Mention test design constraints: fairness, parity, channel rules."},
+{t:"ela", q:"Contribution margin is 65%, demand elasticity in the market is about −0.9. Marketing proposes a 20% promotion. Your view?",
+ o:["Approve — any discount grows volume","Unprofitable: it needs about +44% volume to break even, but elasticity suggests only about +22%","Profitable if run for longer","Neutral"],
+ a:1, e:"Needed uplift = d/(m − d) = 0.2/0.45 ≈ 44%. With E = −0.9, a 20% price cut brings roughly (0.8)^−0.9 − 1 ≈ 22%. The promo loses profit.",
+ tip:"Have the break-even table in your head: at 65% margin, 10% → +18%, 20% → +44%."},
+{t:"ela", q:"Demand for a product is inelastic (|E| < 1). What does the Lerner rule imply?",
+ o:["Cut the price","The price is below the profit-maximising level — there is room to raise it","Keep it exactly as is","Elasticity is irrelevant to pricing"],
+ a:1, e:"With |E| < 1, a price increase raises revenue and profit; the optimum lies where demand becomes elastic. In practice you'd raise gradually and watch competitors and renewals.",
+ tip:"Add the caveat: long-term effects (brand, churn) aren't in a static elasticity."},
+{t:"ela", q:"Why is the intro discount that maximises LTV usually lower than the one that maximises new customers or first-year revenue?",
+ o:["LTV ignores the first year","Deeply discounted customers renew less often and pay less in year one, so extra customers add less lifetime value","Because of app-store fees","It is always higher"],
+ a:1, e:"New customers keep rising with discount depth, but deal-seekers churn more at the full-price renewal. LTV balances acquisition against future renewals.",
+ tip:"Ask what the business optimises — acquisition, this year, or lifetime value."},
+{t:"ela", q:"A market runs a 30% promotion every month. Sales spike during promos and dip in between. What is the main risk?",
+ o:["Higher app-store fees","Reference-price damage: customers learn to wait for promotions and the ‘normal’ price loses credibility","FX drift","Lower crawler coverage"],
+ a:1, e:"Frequent deep promotions shift demand into promo weeks (pull-forward) and lower willingness to pay at list price. A constant-elasticity model doesn't capture this.",
+ tip:"Measure the post-promo dip, not just the promo lift."},
+
+/* ---------- eSIM ---------- */
+{t:"esim", q:"A supplier bills per GB sold instead of per GB used. Which plans lose the most margin?",
+ o:["1 GB plans","Large plans (10–20 GB), because they have low utilization and a low price per GB","All plans equally","Only top-ups"],
+ a:1, e:"Large plans are used least (high breakage). Under per-GB-used billing, unused data costs nothing; under per-GB-sold billing you pay for all of it while the plan's price per GB is lowest.",
+ tip:"First question in any eSIM review: what's the billing basis of each supplier?"},
+{t:"esim", q:"France: price index 1.30 vs competitors, gross margin 75%. Thailand: index 0.95, margin 35%. What is a sensible action?",
+ o:["Raise France further","Test lower prices in France to win conversion; review Thailand’s costs or move its price towards the market","Cut prices everywhere","Do nothing"],
+ a:1, e:"France is expensive and very profitable — room to trade margin for volume. Thailand is cheap and thin — underpriced for its costs or needs better supplier terms.",
+ tip:"Use the price-index vs margin map to frame actions by quadrant."},
+{t:"esim", q:"After a supplier cost increase, the floor price needed for a 30% margin would put a plan 35% above competitors. What do you do?",
+ o:["Raise to the floor price anyway","Leave the price and accept the loss permanently","Treat it as a cost or product problem: renegotiate, switch to per-GB-used billing, change plan size or validity — keep it only if strategic","Remove all plans for that destination"],
+ a:2, e:"A floor price that makes you uncompetitive just kills volume. Pricing can't fix a cost problem; supplier terms or plan design can. Some plans may stay as strategic loss-leaders.",
+ tip:"Show you know the limits of pricing."},
+{t:"esim", q:"1 GB plans have a low margin per order, but 35% of their buyers top up. How should you judge their price?",
+ o:["On the first order only","On profit per customer including top-ups","On utilization only","On competitor price only"],
+ a:1, e:"Small plans act as an entry point; top-ups add a large share of their profit. Judging only the first order would wrongly suggest raising or cutting the plan.",
+ tip:"Make the top-up price ladder part of the review."},
+{t:"esim", multi:true, q:"The same eSIM plan earns noticeably less through the mobile app than through the web. Which actions make sense? Select all that apply.",
+ o:["Steer top-ups and repeat purchases to the web","Consider a modest app price premium if store rules and parity policy allow","Cut web prices to match the app margin","Bundle eSIM with security subscriptions sold on the web","Ignore channel — margin is margin"],
+ a:[0,1,3], e:"App stores take a large fee before data costs. Steering, a policy-compliant premium or bundling improve channel economics. Cutting web prices destroys margin for no reason.",
+ tip:"Always check store rules and channel-parity policies before differentiating."},
+
+/* ---------- Governance ---------- */
+{t:"gov", q:"A local currency devalued 25% against the euro. What is the best approach?",
+ o:["Immediately raise local prices by 25%","Quantify FX drift and margin erosion, check affordability and local competitors, apply a phased or threshold-based adjustment across all channels","Do nothing — local prices are stable","Switch the market to euro pricing"],
+ a:1, e:"Full pass-through can kill volume; no action erodes margin and widens arbitrage gaps. Pre-agreed thresholds make it a routine decision, and all channels (incl. app-store tiers and retail stock) must be coordinated.",
+ tip:"Mention FX thresholds as a governance rule, not ad hoc reactions."},
+{t:"gov", q:"Prices in one market are 60% below Western Europe in EUR terms. What is the main risk, and a typical mitigation?",
+ o:["Lower conversion; cut EU prices","Arbitrage through VPN purchases and grey-market key resale; price corridors, region-locked activation and marketplace monitoring","Higher retailer margin; drop retail","No risk"],
+ a:1, e:"Big gaps invite cross-border buying. Corridors define acceptable spreads; technical and marketplace controls limit leakage while still allowing purchasing-power differences.",
+ tip:"Some spread is intended — the job is to control it, not eliminate it."},
+{t:"gov", q:"App stores use fixed price tiers, so you can’t match the web price exactly. What do you do?",
+ o:["Remove the product from app stores","Pick the closest tier, document an accepted parity tolerance and monitor conversion","Change the web price to every new tier","Ignore it"],
+ a:1, e:"Exact parity isn't always possible. A documented tolerance keeps governance clear and avoids constant web-price changes.",
+ tip:"Governance = clear rules + documented exceptions."},
+{t:"gov", q:"How do you make sure an approved price change went live correctly in all channels?",
+ o:["Check the web store manually","Compare approved prices (single source of truth by SKU, market, currency, channel, date) with live prices from all channels — automatically where possible — and log exceptions","Wait for customer complaints","Ask each channel manager"],
+ a:1, e:"Accuracy requires a master list and a systematic comparison with web, app stores, marketplaces and retail price files, plus checks for tax, currency, rounding and floor breaches.",
+ tip:"Report pricing accuracy as a KPI: errors per release, % validated before go-live."},
+{t:"gov", q:"A promotion stacks with a partner discount. Where must floor-price checks be applied?",
+ o:["On the list price only","On the final effective price after all stacked discounts","Only in retail","Once a year in the price review"],
+ a:1, e:"Floors protect margin and positioning; stacked discounts can push the effective price below them even when each discount alone is fine.",
+ tip:"Floor checks belong in the approval workflow, before go-live."},
+
+/* ---------- Market ---------- */
+{t:"mkt", q:"Kaspersky’s FY2025 revenue grew +4% at constant currency but +15% at actual exchange rates. What does this tell a pricing analyst?",
+ o:["Underlying growth was 15%","Currency movements explain a large part of the reported growth; underlying performance should be judged at constant currency","Prices rose 11%","Volume fell"],
+ a:1, e:"The 11 pp gap is FX, not commercial performance. That's why price effects are measured at constant currency and FX is reported separately.",
+ tip:"Connect it to your PVM work: separate FX line."},
+{t:"mkt", q:"After the US exit, Kaspersky’s consumer growth comes from Russia/CIS, the Middle East, APAC and Latin America. What is the biggest pricing implication?",
+ o:["Pricing becomes simpler","More exposure to volatile currencies and affordability differences — FX rules, harmonization and arbitrage control become central","Competitors disappear","Renewals stop mattering"],
+ a:1, e:"Emerging markets bring inflation, devaluations and very different purchasing power, so FX-driven repricing, corridors and floors become everyday work.",
+ tip:"Shows you connect strategy to day-to-day pricing tasks."},
+{t:"mkt", q:"Microsoft Defender now scores at the top of independent lab tests. How should paid consumer security respond in pricing and packaging?",
+ o:["Cut prices to zero","Differentiate through bundles — VPN, password manager, identity and family protection — and price tiers by that value","Ignore Defender","Raise prices on basic antivirus"],
+ a:1, e:"When basic protection is free and good, paid value moves to features and convenience. Tier architecture and upgrade paths become the main pricing levers.",
+ tip:"“We don’t sell antivirus; we sell a protection bundle.”"},
+{t:"mkt", q:"Gen Digital is roughly five times Kaspersky’s size. Which competitive response is most realistic for a smaller player?",
+ o:["Match Gen Digital’s prices everywhere","Compete where it’s strong (regions, channels, specific tiers and new products like eSIM), with targeted rather than across-the-board price moves","Exit consumer security","Copy Norton’s packaging"],
+ a:1, e:"Scale players can win price wars. A focused player prices to its regional strengths and differentiates the portfolio.",
+ tip:"Avoid price wars; use targeted responses."},
+
+/* ---------- Process ---------- */
+{t:"proc", q:"Finance wants +8% in all markets. Your analysis shows two markets would fall below the long-term break-even renewal rate. What do you do?",
+ o:["Implement +8% everywhere as asked","Refuse to implement","Show market-level impact with break-evens, propose differentiated increases that hit a similar revenue target, and align with Finance and regional teams","Escalate to the CEO"],
+ a:2, e:"Good pricing analysts bring options with numbers, not just objections. A differentiated plan can meet the financial goal with less churn risk.",
+ tip:"Structure: impact → options → recommendation → agreement."},
+{t:"proc", q:"You maintain a 50,000-row pricing file mapping SKU × market prices. What is the most robust lookup approach?",
+ o:["VLOOKUP with default settings","Power Query merges or XLOOKUP with exact match, plus reconciliation checks (counts and totals)","Copy-paste values by hand","Approximate match to save time"],
+ a:1, e:"VLOOKUP defaults to approximate match and breaks when columns move. Exact-match lookups or Power Query merges are reliable; reconciliation checks catch missing or duplicated keys.",
+ tip:"Mention checks: row counts before and after, totals, unmatched keys."},
+{t:"proc", q:"You discover a live price error: one market shows the price in the wrong currency. What are your first steps?",
+ o:["Fix it quietly and move on","Assess impact (orders, revenue, customers), correct it through the change process, inform stakeholders, then add a validation check so it can’t recur","Wait for the next price review","Blame the channel team"],
+ a:1, e:"Speed matters, but so do traceability and prevention. Documenting the fix and adding an automated check improves pricing accuracy going forward.",
+ tip:"Incident → fix → communicate → prevent."},
+{t:"proc", q:"Product wants a lower intro price to boost acquisition; Finance wants to protect ARPU. How do you contribute?",
+ o:["Side with whoever is more senior","Quantify both views with an LTV model — conversion uplift vs renewal rate and margin — and propose a test to settle it","Pick the average of both proposals","Avoid the discussion"],
+ a:1, e:"Turning opinions into a shared model (and a test) moves the discussion from positions to evidence.",
+ tip:"Neutral, data-driven facilitator — exactly what the role description asks for."},
+];
+
+const app = document.getElementById("app");
+const KEY = "pricing-final-quiz-v1";
+let best = {};
+try { best = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e) {}
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function shuffle(a){ a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const L = "ABCDEFG";
+let sel = new Set(Object.keys(TOPICS)), count = "all";
+let run = null;
+
+function prepare(q){
+  const order = shuffle(q.o.map((_, i) => i));
+  const correct = q.multi ? q.a.map(i => order.indexOf(i)).sort() : order.indexOf(q.a);
+  return {...q, opts: order.map(i => q.o[i]), correct};
+}
+
+function renderStart(){
+  const pool = Q.filter(q => sel.has(q.t));
+  app.innerHTML = `
+  <div class="card">
+    <h2 class="h">Final interview quiz</h2>
+    <p class="muted">${Q.length} scenario questions across all topics, harder than the earlier quizzes and closer to how interviewers ask. Some questions have several correct answers — they are marked <span class="chip-s">Select all that apply</span>. After each answer you’ll see why, plus a tip on how to say it in an interview.</p>
+    <h3 class="sub">Topics</h3>
+    <div class="chips">${Object.entries(TOPICS).map(([k, v]) => {
+      const n = Q.filter(q => q.t === k).length;
+      return `<button class="chip" data-t="${k}" aria-pressed="${sel.has(k)}">${esc(v)} <span class="n">${n}</span></button>`;
+    }).join("")}</div>
+    <div class="row">
+      <button class="btn ghost small" id="all">Select all</button>
+      <button class="btn ghost small" id="none">Clear</button>
+    </div>
+    <h3 class="sub">Length</h3>
+    <div class="chips">
+      <button class="chip" data-c="all" aria-pressed="${count === "all"}">All selected (${pool.length})</button>
+      <button class="chip" data-c="20" aria-pressed="${count === "20"}">Random 20</button>
+      <button class="chip" data-c="10" aria-pressed="${count === "10"}">Quick 10</button>
+    </div>
+    <div class="row start">
+      <button class="btn primary" id="go"${pool.length ? "" : " disabled"}>Start quiz</button>
+      <button class="btn" id="review">Study mode: all questions with answers</button>
+    </div>
+    ${best.score !== undefined ? `<p class="muted small">Best result so far: ${best.score} of ${best.total}.</p>` : ""}
+  </div>`;
+  app.querySelectorAll("[data-t]").forEach(b => b.onclick = () => { const t = b.dataset.t; sel.has(t) ? sel.delete(t) : sel.add(t); renderStart(); });
+  app.querySelectorAll("[data-c]").forEach(b => b.onclick = () => { count = b.dataset.c; renderStart(); });
+  document.getElementById("all").onclick = () => { sel = new Set(Object.keys(TOPICS)); renderStart(); };
+  document.getElementById("none").onclick = () => { sel = new Set(); renderStart(); };
+  document.getElementById("review").onclick = renderReview;
+  document.getElementById("go").onclick = () => {
+    let qs = shuffle(Q.filter(q => sel.has(q.t)));
+    if (count !== "all") qs = qs.slice(0, +count);
+    run = {qs: qs.map(prepare), i: 0, picks: new Set(), checked: false, results: []};
+    renderQ();
+  };
+}
+
+function renderQ(){
+  const q = run.qs[run.i], n = run.qs.length;
+  const right = run.results.filter(r => r.ok).length;
+  const isRight = i => q.multi ? q.correct.includes(i) : i === q.correct;
+  let verdict = "";
+  if (run.checked) {
+    const ok = run.results[run.i].ok;
+    verdict = `<div class="fb ${ok ? "ok" : "bad"}"><b>${ok ? "Correct." : q.multi ? "Not quite — the correct set is highlighted." : "Not quite."}</b> ${esc(q.e)}</div>
+      <div class="tip"><b>Interview tip:</b> ${esc(q.tip)}</div>`;
+  }
+  app.innerHTML = `
+  <div class="progress"><div class="bar"><i style="width:${(run.i + (run.checked ? 1 : 0)) / n * 100}%"></i></div>
+    <span>Question ${run.i + 1} of ${n} · correct ${right}</span></div>
+  <article class="card qcard" aria-live="polite">
+    <div class="top"><span class="tag">${esc(TOPICS[q.t])}</span>${q.multi ? `<span class="chip-s">Select all that apply</span>` : ""}</div>
+    <h2 class="qq">${esc(q.q)}</h2>
+    <div class="opts" role="${q.multi ? "group" : "radiogroup"}">${q.opts.map((o, i) => {
+      let cls = "opt";
+      if (run.picks.has(i)) cls += " picked";
+      if (run.checked) { if (isRight(i)) cls += " right"; else if (run.picks.has(i)) cls += " wrong"; }
+      return `<button class="${cls}" data-i="${i}" role="${q.multi ? "checkbox" : "radio"}" aria-checked="${run.picks.has(i)}"${run.checked ? " disabled" : ""}><span class="k">${q.multi ? (run.picks.has(i) ? "☑" : "☐") : L[i]}</span><span>${esc(o)}</span></button>`;
+    }).join("")}</div>
+    ${verdict}
+    <div class="row end">
+      <button class="btn ghost small" id="quit">End quiz</button>
+      ${run.checked ? `<button class="btn primary" id="next">${run.i < n - 1 ? "Next question →" : "See results"}</button>`
+                    : `<button class="btn primary" id="check"${run.picks.size ? "" : " disabled"}>Check answer</button>`}
+    </div>
+    <p class="keys">Keys: ${q.multi ? "1–6 toggle" : "1–4 choose"} · Enter — check / next</p>
+  </article>`;
+  app.querySelectorAll(".opt").forEach(b => b.onclick = () => {
+    const i = +b.dataset.i;
+    if (q.multi) run.picks.has(i) ? run.picks.delete(i) : run.picks.add(i);
+    else run.picks = new Set([i]);
+    renderQ();
+  });
+  const chk = document.getElementById("check");
+  if (chk) chk.onclick = check;
+  const nx = document.getElementById("next");
+  if (nx) nx.onclick = next;
+  document.getElementById("quit").onclick = () => { if (confirm("End the quiz and see results so far?")) { run.qs = run.qs.slice(0, run.results.length); renderResults(); } };
+}
+function check(){
+  const q = run.qs[run.i];
+  const picks = [...run.picks].sort();
+  const ok = q.multi ? JSON.stringify(picks) === JSON.stringify(q.correct) : picks[0] === q.correct;
+  run.results[run.i] = {ok, q};
+  run.checked = true;
+  renderQ();
+}
+function next(){
+  if (run.i < run.qs.length - 1) { run.i++; run.picks = new Set(); run.checked = false; renderQ(); window.scrollTo({top: 0}); }
+  else renderResults();
+}
+
+function renderResults(){
+  const res = run.results.filter(Boolean);
+  const score = res.filter(r => r.ok).length, total = res.length;
+  if (total && (best.score === undefined || score / total > best.score / best.total)) { best = {score, total}; try { localStorage.setItem(KEY, JSON.stringify(best)); } catch(e) {} }
+  const byT = {};
+  res.forEach(r => { const t = r.q.t; byT[t] = byT[t] || {ok: 0, n: 0}; byT[t].n++; if (r.ok) byT[t].ok++; });
+  const missed = res.filter(r => !r.ok);
+  const pctv = total ? Math.round(score / total * 100) : 0;
+  const msg = pctv >= 85 ? "Interview-ready." : pctv >= 65 ? "Solid — review the topics below." : "Worth another round on the weaker topics.";
+  app.innerHTML = `
+  <div class="card">
+    <h2 class="h">Result: ${score} of ${total} (${pctv}%)</h2>
+    <p class="muted">${msg}</p>
+    <div class="topics">${Object.entries(byT).map(([t, v]) => {
+      const p = v.ok / v.n;
+      return `<div class="trow"><span>${esc(TOPICS[t])}</span><div class="tbar"><i style="width:${p * 100}%;background:${p >= 0.8 ? "var(--ok)" : p >= 0.5 ? "var(--warn)" : "var(--pink)"}"></i></div><span class="tn">${v.ok}/${v.n}</span></div>`;
+    }).join("")}</div>
+    <div class="row start">
+      <button class="btn primary" id="again">New quiz</button>
+      ${missed.length ? `<button class="btn" id="retry">Retry the ${missed.length} missed</button>` : ""}
+    </div>
+  </div>
+  ${missed.length ? `<h3 class="sub">Review what you missed</h3>${missed.map(r => reviewCard(r.q)).join("")}` : ""}`;
+  document.getElementById("again").onclick = renderStart;
+  const rt = document.getElementById("retry");
+  if (rt) rt.onclick = () => { run = {qs: shuffle(missed.map(r => Q.find(x => x.q === r.q.q))).map(prepare), i: 0, picks: new Set(), checked: false, results: []}; renderQ(); };
+}
+function reviewCard(q){
+  const ans = q.multi ? q.a.map(i => q.o[i]) : [q.o[q.a]];
+  return `<article class="card rcard"><div class="top"><span class="tag">${esc(TOPICS[q.t])}</span>${q.multi ? `<span class="chip-s">Select all that apply</span>` : ""}</div>
+    <h3 class="rq">${esc(q.q)}</h3>
+    <ul class="ans">${ans.map(a => `<li>${esc(a)}</li>`).join("")}</ul>
+    <p class="expl">${esc(q.e)}</p><p class="tip"><b>Interview tip:</b> ${esc(q.tip)}</p></article>`;
+}
+function renderReview(){
+  app.innerHTML = `<div class="row"><button class="btn" id="back">← Back</button></div>
+    ${Object.keys(TOPICS).map(t => `<h3 class="sub">${esc(TOPICS[t])}</h3>${Q.filter(q => q.t === t).map(reviewCard).join("")}`).join("")}`;
+  document.getElementById("back").onclick = renderStart;
+}
+
+document.addEventListener("keydown", e => {
+  if (!run || !document.querySelector(".qcard") || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (/^[1-7]$/.test(e.key)) { const b = document.querySelector(`.opt[data-i="${+e.key - 1}"]`); if (b && !b.disabled) b.click(); }
+  if (e.key === "Enter") { const b = document.getElementById("check") || document.getElementById("next"); if (b && !b.disabled) { e.preventDefault(); b.click(); } }
+});
+renderStart();
+
+</script>
+</body>
+</html>
