@@ -1,0 +1,44 @@
+name: esim-ab-lab
+
+services:
+  db:
+    image: postgres:16
+    container_name: esim-db
+    environment:
+      POSTGRES_DB: esim
+      POSTGRES_USER: esim
+      POSTGRES_PASSWORD: esim
+    ports:
+      - "5433:5432"            # снаружи 5433, чтобы не конфликтовать с локальным Postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro   # схема создаётся при первом старте
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U esim -d esim"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+  adminer:                     # веб-интерфейс к базе: http://localhost:8080
+    image: adminer:4
+    container_name: esim-adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  loader:                      # разовая загрузка: docker compose run --rm loader
+    build:
+      context: .
+      dockerfile: loader/Dockerfile
+    profiles: ["load"]
+    environment:
+      DATABASE_URL: postgresql://esim:esim@db:5432/esim
+    volumes:
+      - ./data:/app/data:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
